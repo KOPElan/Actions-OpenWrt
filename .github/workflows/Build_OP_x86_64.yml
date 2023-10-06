@@ -19,8 +19,12 @@ on:
       #- master
 
   schedule:
-    # 对应的是 UTC 时间，需要转换，0 代表北京时间8点，每个月1日/15日14点编译一次
-    - cron: 30 16 17 * *
+    # 对应的是 UTC 时间，需要转换，0 代表北京时间8点，每个月1日/15日12点编译一次
+    - cron: 0 4 1,15 * *
+
+  # 手动触发，https://learn.microsoft.com/zh-cn/training/modules/github-actions-automate-tasks/2c-configure-github-actions-workflow
+  workflow_dispatch:
+
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -121,6 +125,9 @@ jobs:
           rm -rf sha256sums
           rm -rf *.manifest
           rm -rf *kernel.bin
+          rm -rf *.vmdk
+          rm -rf *rootfs.img.gz
+          rm -rf *.json
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
       - name: Upload firmware directory
